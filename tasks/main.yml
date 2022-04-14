@@ -1,0 +1,11 @@
+---
+# tasks file for roles/ansible-role-apache
+
+- name: Installation
+  include_tasks: "install_{{ ansible_facts['os_family'] }}.yml"
+
+- name: Configuration
+  include_tasks: "config_{{ ansible_facts['os_family'] }}.yml"
+
+- name: Deploiement
+  include_tasks: "deploy_{{ ansible_facts['os_family'] }}.yml"

@@ -1,0 +1,38 @@
+<!-- {{ ansible_managed }} -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <body>
+        <h1 style="color:{{ html_color }}"> Fichier dynamique déployé par ansible </h1>
+        <h1> Serveur : {{ inventory_hostname }} </h1>
+        {# Penser aux filtres pour valeurs par defaut #}
+        <h2> Contact : {{ devweb_contact | default('devweb@formation.lan') }} </h2>
+        <h3> Distribution: {{ ansible_facts['os_family'] }}
+        {# Commentaire jinja2 : test if avec {% %} %}#}
+        {% if ansible_facts['distribution_version'] >= '11' %}
+        <h3> Version requise OK </h3>
+        {% else %}
+        <h3> Version requise KO </h3>
+        {% endif %}
+        {# Boucle sur un fact de type liste#}
+        {% for i in ansible_facts['interfaces'] %}
+        {% if i != 'lo' %}
+        <p> Interface : {{ i |upper }} => IP : {{ ansible_facts[i]['ipv4']['address'] }} </p>
+        {% endif %}
+        {% endfor%}
+
+        {# Se service de l'inventaire pour lister les membres d'un groupe, voir aller chercher des valeurs d'autre membres#}
+        Membres du groupe d'inventaire database : {{ groups['database'] }}
+        {% for _machine in groups['database'] %}
+        {# utilisation de la variable magique hostvar pour recuperer un valeur d'une machine exterieure au play#}
+        <p> Version bdd pour {{ _machine }} : {{ hostvars[_machine]['database_version']}} </p>
+        <p> Distibution pour {{ _machine }} : {{ hostvars[_machine]['ansible_facts']['os_family'] }} </p> 
+        {% endfor %}
+    </body>
+</html>

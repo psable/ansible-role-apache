@@ -1,0 +1,13 @@
+- name: Configuration apache
+  ansible.builtin.lineinfile:
+    path: "{{ apache_config_path_file }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    validate:  "apache2ctl -t -f %s"
+  loop:
+    - { regexp: '^#?LogLevel', line: 'LogLevel warn' }
+    - { regexp: '^KeepAlive', line: 'KeepAlive On' }
+  notify:
+    - Restart apache
+  tags:
+    - apache_config

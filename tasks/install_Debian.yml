@@ -1,0 +1,14 @@
+- name: Installation apache
+  ansible.builtin.apt:
+    name: "{{ apache_package_name }}"
+    state: present
+  tags:
+    - apache_install
+
+- name: Configuration du service apache2
+  ansible.builtin.service:
+    name: "{{ apache_service_name }}"
+    enabled: yes
+    state: started
+  tags:
+    - apache_install

@@ -1,0 +1,5 @@
+---
+# vars file for roles/ansible-role-apache
+apache_package_name: apache2
+apache_service_name: apache2
+apache_config_path_file: /etc/apache2/apache2.conf
